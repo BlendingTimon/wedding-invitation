@@ -1,70 +1,209 @@
-<script>
-  // Formspree endpoint
-  const formEndpoint = "https://formspree.io/f/movpzggy";
-
-  async function sendRSVP(status) {
-    const name = document.getElementById("name").value.trim() || "(имя не указано)";
-    const comment = document.getElementById("message").value.trim() || "";
-
-    const subject = `RSVP: ${name} — ${status}`;
-    const message = `Статус: ${status}\nИмя: ${name}\n\nКомментарий: ${comment}`;
-
-    try {
-      const response = await fetch(formEndpoint, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          _subject: subject,
-          name: name,
-          status: status,
-          message: message,
-        }),
-      });
-
-      if (response.ok) {
-        alert("Спасибо! Ваш ответ успешно отправлен 💌");
-        document.getElementById("name").value = "";
-        document.getElementById("message").value = "";
-      } else {
-        alert("Не удалось отправить ответ. Попробуйте позже 🙏");
-      }
-    } catch (err) {
-      alert("Произошла ошибка при отправке. Попробуйте снова.");
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Приглашение — Тимур & Гауһар</title>
+  <style>
+    :root{--accent:#c36;--muted:#666;--bg:rgba(0,0,0,0.35)}
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family:Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;color:#111}
+    /* Background photo */
+    body{
+      background-image: url('/mnt/data/WhatsApp画像 2025-11-03 21.57.00_684f2288.jpg');
+      background-size: cover;
+      background-position: center center;
+      background-repeat: no-repeat;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
     }
-  }
+    /* dark overlay for readability */
+    .overlay{
+      position:fixed;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0.35),rgba(0,0,0,0.45));pointer-events:none;
+    }
 
-  document.getElementById("yesBtn").addEventListener("click", () => sendRSVP("Приду"));
-  document.getElementById("noBtn").addEventListener("click", () => sendRSVP("Не смогу прийти"));
+    /* Card */
+    .card{width:100%;max-width:980px;background:rgba(255,255,255,0.95);border-radius:14px;box-shadow:0 10px 40px rgba(0,0,0,0.25);overflow:hidden;position:relative;z-index:5}
+    .hero{padding:34px 28px;text-align:center;background:transparent}
+    .names{font-family:Georgia, "Times New Roman", serif;font-size:36px;letter-spacing:1px}
+    .date{font-weight:700;color:var(--accent);margin-top:6px}
+    .location{color:var(--muted);margin-top:6px}
+    .section{padding:22px 28px;border-top:1px solid #efe7e7}
+    h2{margin:0 0 8px 0}
+    p{margin:0 0 12px 0;line-height:1.45}
 
-  /* Sakura petals generator */
-  const PETAL_COUNT = 36;
-  function rand(min, max) { return Math.random() * (max - min) + min; }
+    /* Grid layout */
+    .grid{display:grid;grid-template-columns:1fr 320px;gap:18px}
+    @media (max-width:880px){.grid{grid-template-columns:1fr} .names{font-size:28px}}
 
-  for (let i = 0; i < PETAL_COUNT; i++) {
-    const petal = document.createElement("div");
-    petal.className = "petal";
-    petal.style.left = rand(0, 100) + "vw";
-    const scale = rand(0.7, 1.4);
-    petal.style.width = 22 * scale + "px";
-    petal.style.height = 24 * scale + "px";
-    petal.style.transform = "rotate(" + rand(0, 360) + "deg)";
-    const duration = rand(6, 18);
-    const delay = rand(-10, 0);
-    petal.style.animation = `fall ${duration}s linear ${delay}s infinite`;
-    petal.style.opacity = rand(0.85, 1);
-    document.body.appendChild(petal);
+    /* RSVP box */
+    .rsvp-box{background:linear-gradient(180deg,#fff 0%,#fff8f9 100%);border-radius:10px;padding:16px;box-shadow:inset 0 1px 0 rgba(255,255,255,0.6)}
+    label{display:block;font-size:13px;margin:8px 0 6px;color:var(--muted)}
+    input[type=text],textarea{width:100%;padding:10px;border:1px solid #e8e1e1;border-radius:8px;font-size:15px}
+    .rsvp-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:12px}
+    button.rsvp{flex:1;padding:12px;border-radius:10px;border:none;font-weight:700;cursor:pointer}
+    button.yes{background:#2a9d8f;color:white}
+    button.no{background:#e76f51;color:white}
+    .muted{color:var(--muted);font-size:14px}
 
-    (function (p) {
-      const amplitude = rand(20, 80);
-      const speed = rand(0.002, 0.01);
-      let start = performance.now() - rand(0, 10000);
-      function frame(t) {
-        const progress = (t - start) * speed;
-        const x = Math.sin(progress) * amplitude;
-        p.style.transform = `translateX(${x}px) rotate(${(progress * 40) % 360}deg)`;
+    footer{padding:12px;text-align:center;font-size:13px;color:#666}
+
+    /* Dress code box */
+    .dress{background:#fff6f8;border-left:4px solid var(--accent);padding:12px;border-radius:8px;margin-top:12px}
+
+    /* Sakura petals animation */
+    .petal{
+      position:fixed;
+      top:-60px;
+      width:22px;
+      height:24px;
+      background: radial-gradient(closest-side, #ffcad4 40%, #ffb3c7 60%, transparent 61%);
+      border-radius:60% 40% 60% 40% / 50% 50% 50% 50%;
+      opacity:0.95;
+      transform:rotate(0deg);
+      pointer-events:none;
+      z-index:6;
+      will-change:transform, left, opacity;
+      filter: drop-shadow(0 1px 0 rgba(0,0,0,0.12));
+    }
+    @keyframes fall {
+      0%{transform: translateY(-10vh) rotate(0deg); opacity:1}
+      100%{transform: translateY(110vh) rotate(720deg); opacity:0.85}
+    }
+    @keyframes sway {
+      0%{transform: translateX(0px)}
+      50%{transform: translateX(40px)}
+      100%{transform: translateX(0px)}
+    }
+
+    /* small helper to make page content readable over photo on small screens */
+    .content-wrap{padding:18px}
+  </style>
+</head>
+<body>
+  <div class="overlay" aria-hidden="true"></div>
+
+  <main class="card" role="main" aria-labelledby="invite-title">
+    <section class="hero">
+      <div class="names" id="invite-title">Тимур &amp; Гауһар</div>
+      <div class="date">27 августа</div>
+      <div class="location">Астана — <strong>Пекин Палас</strong></div>
+      <div class="muted" style="margin-top:8px">Мы будем рады видеть вас в этот особенный день</div>
+    </section>
+
+    <section class="section">
+      <div class="grid">
+        <div>
+          <h2>Подробности</h2>
+          <p><strong>Дата:</strong> 27 августа</p>
+          <p><strong>Город:</strong> Астана</p>
+          <p><strong>Место проведения:</strong> <em>(ул. Сыганак 45, Астана 010000, Казахстан)</em></p>
+
+          <h2>Программа (приблизительно)</h2>
+          <p>18:00 — Церемония<br>19:00 — Ужин и поздравления<br>21:00 — Танцы и развлекательная часть</p>
+
+          <h2>Дресс-код (важно)</h2>
+          <div class="dress">
+            <p style="margin:0">
+              Для создания единого праздничного настроения просим выбирать элегантные наряды и избегать спортивного стиля, а также белых и слишком открытых/облегающих/коротких платьев. 
+            Благодарим за понимание и заботу о красоте момента 💕
+            </p>
+          </div>
+
+          <h2 style="margin-top:14px">Контакты организаторов</h2>
+          <p class="muted">Если у вас есть вопросы — напишите нам по электронной почте: <strong>timur.kz.jp@gmail.com</strong></p>
+        </div>
+
+        <aside>
+          <div class="rsvp-box">
+            <h2>Подтвердить присутствие</h2>
+            <p class="muted">Пожалуйста, выберите один из вариантов ниже. Можно также указать своё имя и комментарий перед отправкой.</p>
+
+            <label for="name">Ваше имя (необязательно)</label>
+            <input id="name" type="text" placeholder="Имя Фамилия">
+
+            <label for="message">Комментарий (необязательно)</label>
+            <textarea id="message" rows="3" placeholder="Например: приду с супругой(ом)"></textarea>
+
+            <div class="rsvp-actions" style="margin-top:8px">
+              <button class="rsvp yes" id="yesBtn">Приду — подтвердить</button>
+              <button class="rsvp no" id="noBtn">Не смогу прийти</button>
+            </div>
+
+            <p class="muted" style="margin-top:10px;font-size:13px">Ответы придут на: <strong>timur.kz.jp@gmail.com</strong></p>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <footer>
+      <div>С любовью, Тимур &amp; Гауһар</div>
+    </footer>
+  </main>
+
+  <script>
+    // Email where RSVPs should go
+    const rsvpEmail = 'timur.kz.jp@gmail.com';
+
+    function sendRSVP(status){
+      const name = document.getElementById('name').value.trim() || '(имя не указано)';
+      const comment = document.getElementById('message').value.trim() || '';
+      const subject = encodeURIComponent('RSVP: ' + status + ' — ' + name);
+      let body = 'Статус: ' + status + '\\nИмя: ' + name + '\\n\\n';
+      if(comment) body += 'Комментарий: ' + comment + '\\n\\n';
+      body += 'Спасибо!';
+      // Open default mail client
+      const mailto = 'mailto:' + rsvpEmail + '?subject=' + subject + '&body=' + encodeURIComponent(body);
+      window.location.href = mailto;
+    }
+
+    document.getElementById('yesBtn').addEventListener('click', ()=> sendRSVP('Приду'));
+    document.getElementById('noBtn').addEventListener('click', ()=> sendRSVP('Не смогу прийти'));
+
+
+    /* Sakura petals generator */
+    const PETAL_COUNT = 36;
+
+    function rand(min, max){ return Math.random() * (max - min) + min; }
+
+    for(let i=0;i<PETAL_COUNT;i++){
+      const petal = document.createElement('div');
+      petal.className = 'petal';
+      // random horizontal start
+      const left = rand(0,100);
+      petal.style.left = left + 'vw';
+      // random size variation
+      const scale = rand(0.7,1.4);
+      petal.style.width = (22 * scale) + 'px';
+      petal.style.height = (24 * scale) + 'px';
+      // random rotation
+      petal.style.transform = 'rotate(' + rand(0,360) + 'deg)';
+      // random animation duration and delay
+      const duration = rand(6,18);
+      const delay = rand(-10,0);
+      petal.style.animation = 'fall ' + duration + 's linear ' + delay + 's infinite';
+      // add slight horizontal sway using CSS variable and an extra transform nested via setInterval
+      // give different opacity
+      petal.style.opacity = rand(0.85,1);
+      document.body.appendChild(petal);
+
+      // Add tiny side-to-side movement using requestAnimationFrame for each petal
+      (function(p){
+        const amplitude = rand(20,80);
+        const speed = rand(0.002,0.01);
+        let start = performance.now() - rand(0, 10000);
+        function frame(t){
+          const progress = (t - start) * speed;
+          const x = Math.sin(progress) * amplitude;
+          p.style.transform = 'translateX(' + x + 'px) rotate(' + (progress*40 % 360) + 'deg)';
+          requestAnimationFrame(frame);
+        }
         requestAnimationFrame(frame);
-      }
-      requestAnimationFrame(frame);
-    })(petal);
-  }
-</script>
+      })(petal);
+    }
+
+  </script>
+</body>
+</html>
