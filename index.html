@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Тимур & Гауһар — Свадебное приглашение</title>
 <style>
 body {
@@ -14,15 +14,15 @@ body {
 }
 header {
   background: url('photo.jpg') center/cover no-repeat;
-  height: 80vh;
+  height: 75vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   color: white;
-  text-shadow: 0 0 12px rgba(0,0,0,0.7);
+  text-shadow: 0 0 12px rgba(0,0,0,0.6);
 }
 h1 {
-  font-size: 48px;
+  font-size: 50px;
   margin: 0;
 }
 .date, .place {
@@ -32,21 +32,37 @@ h1 {
 section {
   max-width: 700px;
   margin: 40px auto;
+  padding: 0 20px;
   line-height: 1.7;
 }
-.buttons a {
+input {
+  width: 80%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #e3cfe0;
+  border-radius: 6px;
+  font-size: 16px;
+}
+.buttons button {
   display: inline-block;
   padding: 14px 28px;
   margin: 10px;
   border: 1px solid #d9a7c7;
   border-radius: 8px;
-  text-decoration: none;
+  background: white;
   color: #d17aa7;
   font-weight: bold;
+  cursor: pointer;
   transition: 0.3s;
 }
-.buttons a:hover {
+.buttons button:hover {
   background: #fbeaf5;
+}
+#thankyou {
+  display: none;
+  margin-top: 25px;
+  font-size: 18px;
+  color: #b36b94;
 }
 </style>
 </head>
@@ -63,16 +79,32 @@ section {
   <p>Мы будем рады разделить этот особенный день вместе с вами.</p>
 
   <h3>Дресс-код</h3>
-  <p>Пожалуйста, воздержитесь от спортивной одежды и белых нарядов. 
-  Также просим не выбирать слишком открытые платья.
+  <p>Пожалуйста, воздержитесь от спортивной одежды и белых нарядов.<br>
+  Также просим не выбирать слишком открытые платья.<br>
   Это поможет сохранить стиль и атмосферу праздника. Благодарим за понимание 💐</p>
 
   <h3>Подтвердите присутствие</h3>
-  <div class="buttons">
-    <a href="mailto:timur.kz.jp@gmail.com?subject=Приду%20на%20свадьбу">🌸 Приду</a>
-    <a href="mailto:timur.kz.jp@gmail.com?subject=Не%20смогу%20прийти">🙏 Не смогу</a>
-  </div>
+
+  <form action="https://formspree.io/f/movpzggy" method="POST" id="rsvpForm">
+    <input type="text" name="Имя" placeholder="Ваше имя" required />
+    <input type="hidden" id="answer" name="Ответ" value=""/>
+    <div class="buttons">
+      <button type="submit" onclick="document.getElementById('answer').value='Приду'">🌸 Приду</button>
+      <button type="submit" onclick="document.getElementById('answer').value='Не смогу'">🙏 Не смогу</button>
+    </div>
+  </form>
+
+  <div id="thankyou">Спасибо! Ваш ответ принят 🌸</div>
 </section>
+
+<script>
+document.getElementById('rsvpForm').addEventListener('submit', function(e){
+  setTimeout(function(){
+    document.getElementById('rsvpForm').style.display="none";
+    document.getElementById('thankyou').style.display="block";
+  }, 400);
+});
+</script>
 
 </body>
 </html>
