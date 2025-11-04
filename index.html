@@ -4,51 +4,84 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Тимур & Гауһар — Свадебное приглашение</title>
+
+<!-- Свадебный шрифт -->
+<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+
 <style>
 body {
   margin: 0;
-  font-family: "Georgia", serif;
   background: #fff;
   color: #333;
+  font-family: "Playfair Display", serif;
   text-align: center;
 }
+
+/* Контейнер с фото */
 header {
-    background: url('photo.jpg') center/cover no-repeat;
-    padding: 120px 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-    color: white;
-    position: relative;
-    max-width: 900px; /* ограничиваем ширину */
-    margin: 0 auto; /* центрируем */
+  position: relative;
+  max-width: 900px;
+  margin: 40px auto;
+  border-radius: 20px;
+  overflow: hidden;
+  padding: 140px 20px;
+  background: url('photo.jpg') center/cover no-repeat;
 }
-  header::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: rgba(0,0,0,0.35); /* прозрачное затемнение */
-    backdrop-filter: blur(2px); /* лёгкое размытие заднего фона */
+
+/* Блок под текст */
+.header-content {
+  position: relative;
+  z-index: 2;
+  display: inline-block;
+  background: rgba(0,0,0,0.38);
+  padding: 25px 35px;
+  border-radius: 16px;
+  backdrop-filter: blur(4px);
+  animation: fadeIn 1.4s ease forwards;
 }
-header h1, header p {
-    position: relative;
-    z-index: 1; /* чтобы текст был поверх затемнения */
+
+/* Анимация появления */
+@keyframes fadeIn {
+  from {opacity: 0; transform: translateY(10px);}
+  to {opacity: 1; transform: translateY(0);}
 }
+
+/* Падающая сакура */
+.sakura {
+  position: fixed;
+  top: -10px;
+  animation: fall linear infinite;
+  opacity: 0.8;
+  pointer-events: none;
+}
+@keyframes fall {
+  to {
+    transform: translate(100vw, 100vh) rotate(360deg);
+  }
+}
+
+/* Текст */
 h1 {
-  font-size: 50px;
+  font-family: "Great Vibes", cursive;
+  font-size: 64px;
+  color: #fff;
   margin: 0;
 }
 .date, .place {
   font-size: 20px;
-  margin-top: 10px;
+  color: #fff;
+  margin-top: 8px;
 }
+
+/* Основной контент */
 section {
   max-width: 700px;
   margin: 40px auto;
   padding: 0 20px;
   line-height: 1.7;
 }
+
+/* Форма */
 input {
   width: 80%;
   padding: 12px;
@@ -57,21 +90,22 @@ input {
   border-radius: 6px;
   font-size: 16px;
 }
+
 .buttons button {
-  display: inline-block;
   padding: 14px 28px;
   margin: 10px;
-  border: 1px solid #d9a7c7;
   border-radius: 8px;
-  background: white;
-  color: #d17aa7;
+  border: none;
+  background: #f3dce9;
+  color: #7d3e60;
   font-weight: bold;
   cursor: pointer;
   transition: 0.3s;
 }
 .buttons button:hover {
-  background: #fbeaf5;
+  background: #e4c4d7;
 }
+
 #thankyou {
   display: none;
   margin-top: 25px;
@@ -82,10 +116,27 @@ input {
 </head>
 <body>
 
+<!-- Падающая сакура -->
+<script>
+function createSakura() {
+  const sakura = document.createElement("div");
+  sakura.classList.add("sakura");
+  sakura.innerHTML = "🌸";
+  sakura.style.left = Math.random()*100+"vw";
+  sakura.style.fontSize = (Math.random()*20+15)+"px";
+  sakura.style.animationDuration = (Math.random()*5+5)+"s";
+  document.body.appendChild(sakura);
+  setTimeout(()=>sakura.remove(), 10000);
+}
+setInterval(createSakura, 400);
+</script>
+
 <header>
-  <h1>Тимур & Гауһар</h1>
-  <div class="date">27 августа • Астана</div>
-  <div class="place">Ресторан: Пекин Палас</div>
+  <div class="header-content">
+    <h1>Тимур & Гауһар</h1>
+    <div class="date">27 августа • Астана</div>
+    <div class="place">Ресторан: Пекин Палас</div>
+  </div>
 </header>
 
 <section>
@@ -116,7 +167,7 @@ document.getElementById('rsvpForm').addEventListener('submit', function(e){
   setTimeout(function(){
     document.getElementById('rsvpForm').style.display="none";
     document.getElementById('thankyou').style.display="block";
-  }, 400);
+  }, 300);
 });
 </script>
 
