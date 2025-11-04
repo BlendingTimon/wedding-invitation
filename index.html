@@ -1,174 +1,171 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Тимур & Гауһар — Свадебное приглашение</title>
 
-<!-- Свадебный шрифт -->
-<link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+<!-- ШРИФТЫ -->
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Playfair+Display:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
 body {
-  margin: 0;
-  background: #fff;
-  color: #333;
-  font-family: "Playfair Display", serif;
-  text-align: center;
+    margin: 0;
+    font-family: 'Playfair Display', serif;
+    background: #fff;
+    color: #333;
+    text-align: center;
 }
 
-/* Контейнер с фото */
+/* ФОТО */
 header {
-  position: relative;
-  max-width: 900px;
-  margin: 40px auto;
-  border-radius: 20px;
-  overflow: hidden;
-  padding: 140px 20px;
-  background: url('photo.jpg') center/cover no-repeat;
+    position: relative;
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+    border-radius: 20px;
+    overflow: hidden;
+    animation: fadeIn 2s ease-in-out;
 }
 
-/* Блок под текст */
-.header-content {
-  position: relative;
-  z-index: 2;
-  display: inline-block;
-  background: rgba(0,0,0,0.38);
-  padding: 25px 35px;
-  border-radius: 16px;
-  backdrop-filter: blur(4px);
-  animation: fadeIn 1.4s ease forwards;
+header img {
+    width: 100%;
+    display: block;
+    object-fit: cover;
 }
 
-/* Анимация появления */
-@keyframes fadeIn {
-  from {opacity: 0; transform: translateY(10px);}
-  to {opacity: 1; transform: translateY(0);}
+/* БЛОК ТЕКСТА НА ФОТО */
+.header-text {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: rgba(0,0,0,0.45);
+    padding: 25px 40px;
+    border-radius: 18px;
+    backdrop-filter: blur(6px);
+    color: white;
+    animation: fadeInUp 1.6s ease-out;
 }
 
-/* Падающая сакура */
+.header-text h1 {
+    margin: 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 50px;
+    font-weight: 700;
+}
+
+.header-text p {
+    margin: 6px 0;
+    font-size: 20px;
+}
+
+/* АНИМАЦИИ */
+@keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+@keyframes fadeInUp { from {opacity:0; transform:translate(-50%,20px);} to {opacity:1; transform:translate(-50%,0);} }
+
+/* САКУРА */
 .sakura {
-  position: fixed;
-  top: -10px;
-  animation: fall linear infinite;
-  opacity: 0.8;
-  pointer-events: none;
+    position: fixed;
+    top: -10px;
+    animation: fall linear infinite;
+    opacity: 0.9;
 }
 @keyframes fall {
-  to {
-    transform: translate(100vw, 100vh) rotate(360deg);
-  }
+    0% { transform: translateY(-10vh) rotate(0deg);}
+    100% { transform: translateY(110vh) rotate(360deg);}
 }
 
-/* Текст */
-h1 {
-  font-family: "Great Vibes", cursive;
-  font-size: 64px;
-  color: #fff;
-  margin: 0;
-}
-.date, .place {
-  font-size: 20px;
-  color: #fff;
-  margin-top: 8px;
-}
-
-/* Основной контент */
+/* Основные блоки */
 section {
-  max-width: 700px;
-  margin: 40px auto;
-  padding: 0 20px;
-  line-height: 1.7;
+    max-width: 700px;
+    margin: 60px auto;
+    padding: 0 20px;
 }
+h2 { font-family: 'Cormorant Garamond'; font-size: 28px; }
 
-/* Форма */
-input {
-  width: 80%;
-  padding: 12px;
-  margin: 10px 0;
-  border: 1px solid #e3cfe0;
-  border-radius: 6px;
-  font-size: 16px;
+/* Кнопки */
+button {
+    padding: 13px 40px;
+    margin: 6px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+    font-size: 18px;
 }
+.yes { background:#F4C6D7; }
+.no { background:#D8D8D8;  }
+button:hover { transform: translateY(-3px); }
 
-.buttons button {
-  padding: 14px 28px;
-  margin: 10px;
-  border-radius: 8px;
-  border: none;
-  background: #f3dce9;
-  color: #7d3e60;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.3s;
-}
-.buttons button:hover {
-  background: #e4c4d7;
-}
-
-#thankyou {
-  display: none;
-  margin-top: 25px;
-  font-size: 18px;
-  color: #b36b94;
-}
+/* Переключатель языка */
+.lang-switch { margin-top: 25px; cursor:pointer; font-weight:600; }
 </style>
 </head>
+
 <body>
 
-<!-- Падающая сакура -->
-<script>
-function createSakura() {
-  const sakura = document.createElement("div");
-  sakura.classList.add("sakura");
-  sakura.innerHTML = "🌸";
-  sakura.style.left = Math.random()*100+"vw";
-  sakura.style.fontSize = (Math.random()*20+15)+"px";
-  sakura.style.animationDuration = (Math.random()*5+5)+"s";
-  document.body.appendChild(sakura);
-  setTimeout(()=>sakura.remove(), 10000);
-}
-setInterval(createSakura, 400);
-</script>
-
+<!-- Фото -->
 <header>
-  <div class="header-content">
-    <h1>Тимур & Гауһар</h1>
-    <div class="date">27 августа • Астана</div>
-    <div class="place">Ресторан: Пекин Палас</div>
-  </div>
+    <img src="photo.jpg" alt="">
+    <div class="header-text">
+        <h1>Тимур & Гауһар</h1>
+        <p class="date">27 августа • Астана</p>
+        <p class="place">Ресторан: Пекин Палас</p>
+    </div>
 </header>
 
+<!-- Переключатель языка -->
+<div class="lang-switch" onclick="toggleLang()">Рус / Қазақ</div>
+
 <section>
-  <h2>Дорогие гости</h2>
-  <p>Мы будем рады разделить этот особенный день вместе с вами.</p>
+    <h2 class="t1">Дорогие гости</h2>
+    <p class="t2">
+        Мы будем рады разделить этот особенный день вместе с вами.
+    </p>
 
-  <h3>Дресс-код</h3>
-  <p>Пожалуйста, воздержитесь от спортивной одежды и белых нарядов.<br>
-  Также просим не выбирать слишком открытые платья.<br>
-  Это поможет сохранить стиль и атмосферу праздника. Благодарим за понимание 💐</p>
+    <h2 class="t3">Дресс-код</h2>
+    <p class="t4">
+        Пожалуйста, воздержитесь от спортивной одежды и белых нарядов.
+        Также просим не выбирать слишком открытые платья.
+        Это поможет сохранить стиль и атмосферу праздника. Благодарим за понимание 🌸
+    </p>
 
-  <h3>Подтвердите присутствие</h3>
+    <h2 class="t5">Подтвердите присутствие</h2>
 
-  <form action="https://formspree.io/f/movpzggy" method="POST" id="rsvpForm">
-    <input type="text" name="Имя" placeholder="Ваше имя" required />
-    <input type="hidden" id="answer" name="Ответ" value=""/>
-    <div class="buttons">
-      <button type="submit" onclick="document.getElementById('answer').value='Приду'">🌸 Приду</button>
-      <button type="submit" onclick="document.getElementById('answer').value='Не смогу'">🙏 Не смогу</button>
-    </div>
-  </form>
-
-  <div id="thankyou">Спасибо! Ваш ответ принят 🌸</div>
+    <form action="https://formspree.io/f/movpzggy" method="POST">
+        <input name="name" placeholder="Ваше имя" style="padding:12px; width:80%; border-radius:8px; border:1px solid #ddd; margin-bottom:20px;">
+        <br>
+        <button class="yes" type="submit" name="status" value="Приду">💗 Приду</button>
+        <button class="no" type="submit" name="status" value="Не смогу">🙏 Не смогу</button>
+    </form>
 </section>
 
+<!-- Сакура -->
 <script>
-document.getElementById('rsvpForm').addEventListener('submit', function(e){
-  setTimeout(function(){
-    document.getElementById('rsvpForm').style.display="none";
-    document.getElementById('thankyou').style.display="block";
-  }, 300);
-});
+function createSakura(){
+    const sak = document.createElement("div");
+    sak.classList.add("sakura");
+    sak.innerHTML="🌸";
+    sak.style.left = Math.random()*100+"vw";
+    sak.style.animationDuration = (4+Math.random()*5)+"s";
+    document.body.appendChild(sak);
+    setTimeout(()=>sak.remove(),8000);
+}
+setInterval(createSakura, 600);
+
+// Переключение RU/KZ
+let ru = true;
+function toggleLang(){
+ ru = !ru;
+ document.querySelector('.t1').innerText = ru ? "Дорогие гости" : "Құрметті қонақтар";
+ document.querySelector('.t2').innerText = ru ? "Мы будем рады разделить этот особенный день вместе с вами." : "Бұл ерекше күнді бірге өткізуге қуаныштымыз.";
+ document.querySelector('.t3').innerText = ru ? "Дресс-код" : "Дресс-код";
+ document.querySelector('.t4').innerText = ru ? 
+ "Пожалуйста, воздержитесь от спортивной одежды и белых нарядов. Также просим не выбирать слишком открытые платья. Это поможет сохранить стиль и атмосферу праздника. Благодарим за понимание 🌸" :
+ "Өтінеміз, спорттық киім мен ақ түсті киімнен бас тартыңыз. Сондай-ақ тым ашық көйлектерді таңдамауды сұраймыз. Бұл мереке атмосферасын сақтауға көмектеседі. Рахмет 🌸";
+ document.querySelector('.t5').innerText = ru ? "Подтвердите присутствие" : "Қатысуыңызды растаңыз";
+}
 </script>
 
 </body>
